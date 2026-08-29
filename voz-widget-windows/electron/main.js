@@ -53,6 +53,13 @@ function createWindow() {
     callback(permission === 'media');
   });
 
+  // Se o preload falhar ao carregar, a janela abre normalmente mas nenhum
+  // botão que dependa de window.api responde — sem isso, esse erro nunca
+  // aparece em lugar nenhum.
+  mainWindow.webContents.on('preload-error', (_event, preloadPath, error) => {
+    log.error(`[main] falha ao carregar preload (${preloadPath})`, error);
+  });
+
   mainWindow.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
 
   // Fechar a janela (Alt+F4, X) só esconde o widget; quem realmente encerra o

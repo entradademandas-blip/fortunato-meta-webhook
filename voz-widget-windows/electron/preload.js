@@ -1,5 +1,16 @@
 const { contextBridge, ipcRenderer } = require('electron');
-const channels = require('./ipc-channels');
+
+// Sandboxed preload scripts can't require() local files (only Electron/Node
+// built-ins) — os nomes de canal são copiados aqui, precisam bater com
+// ipc-channels.js.
+const channels = {
+  MIC_TRANSCRIBE: 'mic:transcribe',
+  MASTER_CONTROLLER_SEND: 'masterController:send',
+  TTS_SPEAK: 'tts:speak',
+  LOG_CLIENT_ERROR: 'log:clientError',
+  WIDGET_SHOWN: 'widget:shown',
+  WIDGET_HIDE: 'widget:hide'
+};
 
 contextBridge.exposeInMainWorld('api', {
   transcribe: (audioBuffer, mimeType) =>

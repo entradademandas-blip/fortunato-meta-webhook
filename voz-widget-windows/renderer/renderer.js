@@ -79,6 +79,16 @@
     setStatus('Processando…');
     hideResponseCard();
 
+    try {
+      await processRecording();
+    } catch (error) {
+      // Rede de segurança: qualquer erro inesperado aparece na tela em vez
+      // de deixar o status preso em "Processando…" para sempre.
+      setStatus('Erro inesperado: ' + (error && error.message ? error.message : error), { error: true });
+    }
+  }
+
+  async function processRecording() {
     const blob = new Blob(recordedChunks, { type: 'audio/webm;codecs=opus' });
     const arrayBuffer = await blob.arrayBuffer();
 
@@ -130,6 +140,13 @@
     ttsPlayer.onended = resetIdle;
   }
 
+  if (!window.api) {
+    // preload.js não carregou (bug de configuração do Electron) — sem isso,
+    // os botões pareceriam simplesmente não fazer nada, sem nenhuma pista.
+    setStatus('Erro interno: preload não carregado — reinicie o widget', { error: true });
+    return;
+  }
+
   btnVoice.addEventListener('click', () => {
     if (isRecording) {
       stopRecording();
@@ -145,9 +162,7 @@
     window.api.hide();
   });
 
-  if (window.api && window.api.onShown) {
-    window.api.onShown(() => {
-      if (!isRecording) resetIdle();
-    });
-  }
+  window.api.onShown(() => {
+    if (!isRecording) resetIdle();
+  });
 })();
