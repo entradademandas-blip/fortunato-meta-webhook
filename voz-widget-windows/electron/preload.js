@@ -15,5 +15,8 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.invoke(channels.LOG_CLIENT_ERROR, { scope, message }),
 
   onShown: (callback) =>
-    ipcRenderer.on(channels.WIDGET_SHOWN, () => callback())
+    ipcRenderer.on(channels.WIDGET_SHOWN, () => callback()),
+
+  hide: () =>
+    ipcRenderer.send(channels.WIDGET_HIDE)
 });

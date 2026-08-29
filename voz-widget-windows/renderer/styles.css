@@ -24,6 +24,7 @@ svg.defs { position: absolute; width: 0; height: 0; }
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  padding-top: 6px;
 }
 
 .crystal {
@@ -225,6 +226,31 @@ svg.defs { position: absolute; width: 0; height: 0; }
   font-family: 'Cormorant Garamond', serif; font-size: 18.5px; line-height: 1.45;
   position: relative; z-index: 2;
 }
+
+.close-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
+  backdrop-filter: blur(2px);
+  color: #EAF2FA;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  -webkit-app-region: no-drag;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.close-btn:hover {
+  background: linear-gradient(135deg, rgba(232,168,125,0.5), rgba(232,168,125,0.15));
+  transform: scale(1.08);
+}
+.close-btn svg { width: 12px; height: 12px; }
 
 .footer-mark {
   font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase;

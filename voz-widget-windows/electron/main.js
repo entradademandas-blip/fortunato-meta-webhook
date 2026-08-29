@@ -111,6 +111,10 @@ function registerIpcHandlers() {
     log.error(`[renderer:${scope}] ${message}`);
     return { ok: true };
   });
+
+  ipcMain.on(channels.WIDGET_HIDE, () => {
+    if (mainWindow) mainWindow.hide();
+  });
 }
 
 app.whenReady().then(() => {

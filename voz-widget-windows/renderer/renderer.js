@@ -1,5 +1,6 @@
 (function () {
   const btnVoice = document.getElementById('btnVoice');
+  const btnClose = document.getElementById('btnClose');
   const statusEl = document.getElementById('status');
   const respToggle = document.getElementById('respToggle');
   const responseCard = document.getElementById('responseCard');
@@ -138,6 +139,11 @@
   });
 
   respToggle.addEventListener('click', toggleResponseMode);
+
+  btnClose.addEventListener('click', () => {
+    if (isRecording) stopRecording();
+    window.api.hide();
+  });
 
   if (window.api && window.api.onShown) {
     window.api.onShown(() => {
