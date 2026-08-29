@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Master Controller — Voz</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg class="defs">
+  <defs>
+    <linearGradient id="veinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B2A4A"/>
+      <stop offset="30%" stop-color="#7DB8E8"/>
+      <stop offset="55%" stop-color="#EAF2FA"/>
+      <stop offset="75%" stop-color="#C9A961"/>
+      <stop offset="100%" stop-color="#1B2A4A"/>
+    </linearGradient>
+    <filter id="veinBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="0.6"/>
+    </filter>
+    <filter id="glassRefract" x="-30%" y="-30%" width="160%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.06" numOctaves="2" seed="7" result="noise">
+        <animate attributeName="baseFrequency" values="0.012 0.06;0.018 0.04;0.012 0.06" dur="9s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+  <div class="stage">
+    <button class="close-btn" id="btnClose" type="button" title="Fechar (fica na bandeja)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="5" y1="5" x2="19" y2="19"/>
+        <line x1="19" y1="5" x2="5" y2="19"/>
+      </svg>
+    </button>
+
+    <div class="brandmark crystal-text">Master Controller</div>
+
+    <div class="section-label crystal-text">Captura</div>
+    <div class="widget crystal">
+      <svg class="vein-svg" viewBox="0 0 400 140" preserveAspectRatio="none">
+        <path d="M -20 90 C 60 40, 120 130, 200 70 S 340 30, 420 80" fill="none" stroke="url(#veinGrad)" stroke-width="1.4" opacity="0.55" filter="url(#veinBlur)" stroke-dasharray="14 10" style="animation: veinflow 6s linear infinite;"/>
+        <path d="M -20 40 C 80 90, 140 10, 220 55 S 360 100, 420 40" fill="none" stroke="url(#veinGrad)" stroke-width="1" opacity="0.4" filter="url(#veinBlur)" stroke-dasharray="10 14" style="animation: veinflow 8s linear infinite reverse;"/>
+        <path d="M -20 115 C 100 100, 160 140, 240 105 S 380 130, 420 110" fill="none" stroke="url(#veinGrad)" stroke-width="0.8" opacity="0.3" filter="url(#veinBlur)" stroke-dasharray="6 16" style="animation: veinflow 10s linear infinite;"/>
+      </svg>
+
+      <div class="btn-col">
+        <button class="glass-btn" id="btnVoice" type="button">
+          <svg class="btn-veins" viewBox="0 0 86 86">
+            <circle cx="43" cy="43" r="30" fill="none" stroke="url(#veinGrad)" stroke-width="1" opacity="0.5" filter="url(#veinBlur)" stroke-dasharray="8 6" style="animation: veinflow 5s linear infinite;"/>
+            <path d="M20 30 Q43 60 66 25" fill="none" stroke="url(#veinGrad)" stroke-width="0.8" opacity="0.4" filter="url(#veinBlur)" stroke-dasharray="5 8" style="animation: veinflow 7s linear infinite reverse;"/>
+          </svg>
+          <div class="ring"></div>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <span class="btn-label crystal-text">Voz</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="btn-col">
+        <button class="glass-btn disabled" id="btnScreen" type="button" aria-disabled="true" title="Em breve">
+          <svg class="btn-veins" viewBox="0 0 86 86">
+            <circle cx="43" cy="43" r="30" fill="none" stroke="url(#veinGrad)" stroke-width="1" opacity="0.5" filter="url(#veinBlur)" stroke-dasharray="8 6" style="animation: veinflow 6s linear infinite reverse;"/>
+            <path d="M18 50 Q43 15 68 48" fill="none" stroke="url(#veinGrad)" stroke-width="0.8" opacity="0.4" filter="url(#veinBlur)" stroke-dasharray="5 8" style="animation: veinflow 8s linear infinite;"/>
+          </svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="18" x2="12" y2="21"/>
+          </svg>
+        </button>
+        <span class="btn-label crystal-text">Tela <em class="soon">em breve</em></span>
+      </div>
+    </div>
+
+    <div class="status dim crystal-text" id="status">Em repouso — toque para começar</div>
+
+    <div class="section-label crystal-text" style="margin-top: 10px;">Resposta</div>
+    <div class="toggle-row">
+      <span class="toggle-label crystal-text">Falada</span>
+      <div class="toggle" id="respToggle">
+        <div class="toggle-knob"></div>
+      </div>
+      <span class="toggle-label crystal-text">Escrita</span>
+    </div>
+
+    <div class="response-card crystal" id="responseCard">
+      <svg class="vein-svg" viewBox="0 0 330 100" preserveAspectRatio="none">
+        <path d="M -10 70 C 60 30, 100 100, 170 55 S 280 20, 340 60" fill="none" stroke="url(#veinGrad)" stroke-width="1" opacity="0.4" filter="url(#veinBlur)" stroke-dasharray="8 10" style="animation: veinflow 7s linear infinite;"/>
+      </svg>
+      <div class="rc-label crystal-text" id="responseLabel">Master Controller</div>
+      <div class="rc-text crystal-text" id="responseText"></div>
+    </div>
+
+    <div class="footer-mark crystal-text">fcp&amp;a · uso restrito</div>
+  </div>
+
+  <audio id="ttsPlayer" hidden></audio>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

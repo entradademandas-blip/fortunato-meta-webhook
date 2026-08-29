@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; background: transparent; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  /* janela sem moldura: o fundo é a área de arrastar da janela */
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+svg.defs { position: absolute; width: 0; height: 0; }
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 6px;
+}
+
+.crystal {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03) 40%, rgba(125,184,232,0.08) 100%);
+  backdrop-filter: blur(2px) saturate(140%);
+  -webkit-backdrop-filter: blur(2px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow:
+    0 6px 22px rgba(0,0,0,0.18),
+    inset 0 1px 1px rgba(255,255,255,0.55),
+    inset 0 -10px 20px rgba(125,184,232,0.10),
+    inset 6px 0 16px rgba(201,169,97,0.06);
+}
+
+@keyframes veinflow { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -240; } }
+
+.brandmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #EAF2FA, #C9A961, #EAF2FA);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 6px rgba(0,0,0,0.35));
+  margin-bottom: 10px;
+}
+
+.crystal-text {
+  position: relative;
+  font-weight: 700;
+  color: rgba(255,255,255,0.05);
+  -webkit-text-stroke: 1px rgba(234,242,250,0.9);
+  text-shadow:
+    0 0 0.5px rgba(125,184,232,0.9),
+    0 0 3px rgba(125,184,232,0.5),
+    0 0 7px rgba(201,169,97,0.35),
+    0 1px 1px rgba(255,255,255,0.4),
+    0 -1px 1px rgba(27,42,74,0.5);
+  filter: url(#glassRefract);
+  animation: crystalshift 6s ease-in-out infinite;
+}
+@keyframes crystalshift {
+  0%, 100% { text-shadow:
+    0 0 0.5px rgba(125,184,232,0.9), 0 0 3px rgba(125,184,232,0.5),
+    0 0 7px rgba(201,169,97,0.35), 0 1px 1px rgba(255,255,255,0.4), 0 -1px 1px rgba(27,42,74,0.5); }
+  50% { text-shadow:
+    0 0 0.5px rgba(201,169,97,0.9), 0 0 3px rgba(201,169,97,0.5),
+    0 0 7px rgba(125,184,232,0.4), 0 1px 1px rgba(255,255,255,0.5), 0 -1px 1px rgba(27,42,74,0.5); }
+}
+
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 9.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.widget {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 24px 34px;
+  border-radius: 100px;
+}
+.widget .vein-svg { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 100px; overflow: visible; }
+
+.btn-col { display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative; z-index: 2; }
+
+.glass-btn {
+  position: relative;
+  width: 86px; height: 86px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.55), rgba(255,255,255,0.06) 55%, rgba(125,184,232,0.10) 100%);
+  backdrop-filter: blur(3px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.22),
+    inset 0 1px 2px rgba(255,255,255,0.7),
+    inset 0 -6px 14px rgba(125,184,232,0.18);
+  transition: transform 0.25s cubic-bezier(.2,.8,.3,1.2);
+  overflow: visible;
+  -webkit-app-region: no-drag;
+}
+.glass-btn:hover { transform: translateY(-2px) scale(1.03); }
+.glass-btn:active { transform: translateY(0) scale(0.96); }
+
+.glass-btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.glass-btn.disabled:hover { transform: none; }
+
+.glass-btn svg.icon {
+  width: 30px; height: 30px;
+  stroke: #EAF2FA;
+  filter: drop-shadow(0 0 4px rgba(125,184,232,0.6));
+  position: relative; z-index: 2;
+}
+
+.btn-veins { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
+
+.ring {
+  position: absolute; inset: -9px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201,169,97,0.65);
+  opacity: 0;
+}
+.glass-btn.active .ring { opacity: 1; animation: pulse 1.7s ease-out infinite; }
+.glass-btn.active {
+  box-shadow:
+    0 4px 20px rgba(201,169,97,0.35),
+    inset 0 1px 2px rgba(255,255,255,0.85),
+    inset 0 -6px 14px rgba(201,169,97,0.30);
+}
+.glass-btn.active svg.icon { stroke: #FFF3D6; filter: drop-shadow(0 0 6px rgba(201,169,97,0.85)); }
+@keyframes pulse {
+  0%   { transform: scale(0.94); opacity: 0.9; }
+  70%  { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.btn-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.btn-label .soon {
+  display: block;
+  font-style: italic;
+  font-size: 8px;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  text-transform: none;
+}
+
+.divider {
+  width: 1px; height: 58px;
+  background: linear-gradient(to bottom, transparent, rgba(125,184,232,0.5), rgba(201,169,97,0.4), transparent);
+  position: relative; z-index: 2;
+}
+
+.status {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 23px; letter-spacing: 0.01em;
+  min-height: 32px; text-align: center;
+  margin-top: 8px;
+}
+.status.dim { font-style: italic; opacity: 0.75; }
+.status.error { color: #E8A87D; }
+
+.toggle-row { display: flex; align-items: center; gap: 14px; position: relative; z-index: 2; }
+.toggle-label {
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.toggle {
+  width: 54px; height: 29px; border-radius: 20px; position: relative; cursor: pointer;
+  background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.25), inset 0 -2px 6px rgba(125,184,232,0.15);
+  transition: box-shadow 0.3s ease;
+  -webkit-app-region: no-drag;
+}
+.toggle.on { box-shadow: inset 0 2px 6px rgba(0,0,0,0.15), inset 0 -2px 8px rgba(201,169,97,0.35); }
+.toggle-knob {
+  position: absolute; top: 2px; left: 2px; width: 23px; height: 23px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #FFFFFF, #AFCBE8 70%, #7DB8E8);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 0 10px rgba(125,184,232,0.5);
+  transition: left 0.3s cubic-bezier(.2,.8,.3,1.2), background 0.3s ease;
+}
+.toggle.on .toggle-knob {
+  left: 27px;
+  background: radial-gradient(circle at 35% 30%, #FFFCF2, #E8CE8F 70%, #C9A961);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 0 12px rgba(201,169,97,0.7);
+}
+
+.response-card {
+  width: 330px; padding: 20px 24px; border-radius: 22px;
+  opacity: 0; transform: translateY(10px) scale(0.98); pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  position: relative;
+  margin-top: 8px;
+}
+.response-card.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; user-select: text; -webkit-app-region: no-drag; }
+.response-card .rc-label {
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  margin-bottom: 8px; position: relative; z-index: 2;
+}
+.response-card .rc-text {
+  font-family: 'Cormorant Garamond', serif; font-size: 18.5px; line-height: 1.45;
+  position: relative; z-index: 2;
+}
+
+.close-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
+  backdrop-filter: blur(2px);
+  color: #EAF2FA;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  -webkit-app-region: no-drag;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.close-btn:hover {
+  background: linear-gradient(135deg, rgba(232,168,125,0.5), rgba(232,168,125,0.15));
+  transform: scale(1.08);
+}
+.close-btn svg { width: 12px; height: 12px; }
+
+.footer-mark {
+  font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase;
+  margin-top: 10px;
+}
