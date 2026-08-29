@@ -16,6 +16,14 @@ let mainWindow = null;
 let tray = null;
 let isQuitting = false;
 
+// Sem isso, cada "npm start" abre um processo novo por cima do anterior (que
+// continua vivo, escondido na bandeja) — janelas empilhadas na mesma posição,
+// e cliques podem acabar indo para uma instância antiga sem o código atual.
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+if (!gotSingleInstanceLock) {
+  app.quit();
+}
+
 function createWindow() {
   const { workAreaSize } = screen.getPrimaryDisplay();
 
@@ -117,22 +125,31 @@ function registerIpcHandlers() {
   });
 }
 
-app.whenReady().then(() => {
-  registerIpcHandlers();
-  createWindow();
-  createTray();
-  registerGlobalHotkey();
-});
+if (gotSingleInstanceLock) {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  });
 
-app.on('window-all-closed', (event) => {
-  // Widget de bandeja: nunca sai automaticamente ao fechar a janela.
-  event.preventDefault();
-});
+  app.whenReady().then(() => {
+    registerIpcHandlers();
+    createWindow();
+    createTray();
+    registerGlobalHotkey();
+  });
 
-app.on('before-quit', () => {
-  isQuitting = true;
-});
+  app.on('window-all-closed', (event) => {
+    // Widget de bandeja: nunca sai automaticamente ao fechar a janela.
+    event.preventDefault();
+  });
 
-app.on('will-quit', () => {
-  globalShortcut.unregisterAll();
-});
+  app.on('before-quit', () => {
+    isQuitting = true;
+  });
+
+  app.on('will-quit', () => {
+    globalShortcut.unregisterAll();
+  });
+}
